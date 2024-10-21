@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "consistency_llm"
+version = "0.1.0"
+description = ""
+authors = ["Xavier <47183833+Xavier-Corbier@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pandas = "^2.2.2"
+openai = "^1.42.0"
+poetry-dotenv = "^0.4.0"
+python-dotenv = "^1.0.1"
+jsonschema = "^4.23.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

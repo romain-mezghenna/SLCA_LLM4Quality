@@ -6,7 +6,8 @@ authors = ["Xavier <47183833+Xavier-Corbier@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
+charset-normalizer = "^3.4.0"
 pandas = "^2.2.2"
 openai = "^1.42.0"
 poetry-dotenv = "^0.4.0"

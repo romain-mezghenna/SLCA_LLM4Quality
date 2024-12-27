@@ -1,7 +1,7 @@
 {
     "type": "object",
     "properties": {
-        "Circuit de prise en charge": {
+        "circuit_de_prise_en_charge": {
             "type": "object",
             "properties": {
                 "La fluidité et la personnalisation du parcours": {
@@ -96,7 +96,7 @@
                 "Les frais supplémentaires et dépassements d’honoraires"
             ]
         },
-        "Professionnalisme de l’équipe": {
+        "professionnalisme_de_l_equipe": {
             "type": "object",
             "properties": {
                 "L’information et les explications": {
@@ -169,7 +169,7 @@
                 "Maternité et pédiatrie"
             ]
         },
-        "Qualité hôtelière": {
+        "qualite_hoteliere": {
             "type": "object",
             "properties": {
                 "L’accès à l’établissement": {
@@ -255,8 +255,8 @@
         }
     },
     "required": [
-        "Circuit de prise en charge",
-        "Professionnalisme de l’équipe",
-        "Qualité hôtelière"
+        "circuit_de_prise_en_charge",
+        "professionnalisme_de_l_equipe",
+        "qualite_hoteliere"
     ]
 }

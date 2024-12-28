@@ -1,11 +1,17 @@
 import pika
 import json
+import os
 import time
 import logging
 from datetime import datetime, timezone
 from pydantic import BaseModel, Field
 from typing import Optional, Dict
 from bson import ObjectId
+from consistency_llm.consistency_evaluation.sca_evaluation import ScaEvaluation
+from consistency_llm.consistency_evaluation.slca_evaluation import SlcaEvaluation
+from consistency_llm.consistency_evaluation.lca_evaluation import LcaEvaluation
+from consistency_llm.llm_queries.few_shot_cot_classification import FewShotCotClassification
+from consistency_llm.llm_queries.initial_classification import InitialClassification
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -83,69 +89,45 @@ def process_verbatim_pipeline(verbatim: Verbatim) -> Verbatim:
         with open(input_csv, "w") as csv_file:
             csv_file.write(verbatim.content)
 
-        # Mocked processing
-        print("Gonna mock the Evaluation, sleeping for 5 seconds")
-        time.sleep(5)
+        
+        # LLM queries
+        initial_classification = InitialClassification(input_csv, output_dir)
+        initial_classification.run()
+        few_shot_cot_classification = FewShotCotClassification(input_csv, output_dir)
+        few_shot_cot_classification.run()
 
-        # Simulated result
-        processed_result = {
-            "circuit_de_prise_en_charge": {
-                "La fluidité et la personnalisation du parcours": {
-                    "positive": 0,
-                    "negative": 0,
-                },
-                "L’accueil et l’admission": {"positive": 0, "negative": 0},
-                "Le circuit administratif": {"positive": 0, "negative": 0},
-                "La rapidité de prise en charge et le temps d’attente": {
-                    "positive": 0,
-                    "negative": 0,
-                },
-                "L’accès au bloc": {"positive": 0, "negative": 0},
-                "La sortie de l’établissement": {"positive": 0, "negative": 1},
-                "Le suivi du patient après le séjour hospitalier": {
-                    "positive": 1,
-                    "negative": 0,
-                },
-                "Les frais supplémentaires et dépassements d’honoraires": {
-                    "positive": 0,
-                    "negative": 0,
-                },
-            },
-            "professionnalisme_de_l_equipe": {
-                "L’information et les explications": {"positive": 0, "negative": 0},
-                "L’humanité et la disponibilité des professionnels": {
-                    "positive": 0,
-                    "negative": 0,
-                },
-                "Les prises en charges médicales et paramédicales": {
-                    "positive": 0,
-                    "negative": 0,
-                },
-                "Droits des patients": {"positive": 0, "negative": 0},
-                "Gestion de la douleur et médicaments": {"positive": 0, "negative": 0},
-                "Maternité et pédiatrie": {"positive": 0, "negative": 0},
-            },
-            "qualite_hoteliere": {
-                "L’accès à l’établissement": {"positive": 0, "negative": 0},
-                "Les locaux et les chambres": {"positive": 0, "negative": 0},
-                "L’intimité": {"positive": 0, "negative": 0},
-                "Le calme/volume sonore": {"positive": 0, "negative": 0},
-                "La température de la chambre": {"positive": 0, "negative": 0},
-                "Les repas et collations": {"positive": 0, "negative": 0},
-                "Les services WiFi et TV": {"positive": 0, "negative": 0},
-            },
-        }
+        # Consistency evaluation
+        sca_evaluation = ScaEvaluation(output_dir)
+        sca_evaluation.run()
+        lca_evaluation = LcaEvaluation(output_dir)
+        lca_evaluation.run()
+        slca_evaluation = SlcaEvaluation(output_dir)
+        slca_evaluation.run()
 
+
+        # Get the result from the output file 
+        with open(f"{output_dir}/evaluations/result_1.json", "r") as file:
+            processed_result = json.load(file).output
+
+        
         # Update the Verbatim instance
         verbatim.result = processed_result
         verbatim.status = "SUCCESS"
+
+        # Clears tmp files
+        # TODO : Uncomment theses lines
+        # os.remove(input_csv)
+        # os.remove(output_dir)
+
         return verbatim
 
     except Exception as e:
         logger.error(f"Error in processing pipeline: {e}")
         # Return an error Verbatim object
         return Verbatim(
-            **verbatim,
+            id=verbatim.id,
+            content=verbatim.content,
+            year=verbatim.year,
             status="ERROR",
             result=None,
         )

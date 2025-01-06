@@ -82,14 +82,13 @@ def process_verbatim_pipeline(verbatim: Verbatim) -> Verbatim:
     """
     try:
 
-        output_dir = f"/tmp/output_{verbatim.id}"
-        input_csv = f"/tmp/input_{verbatim.id}.csv"
+        output_dir = f"./tmp/output_{verbatim.id}"
+        input_csv = f"./tmp/input_{verbatim.id}.csv"
 
         # Write content to a CSV file
         with open(input_csv, "w") as csv_file:
             csv_file.write(verbatim.content)
 
-        
         # LLM queries
         initial_classification = InitialClassification(input_csv, output_dir)
         initial_classification.run()
@@ -104,12 +103,11 @@ def process_verbatim_pipeline(verbatim: Verbatim) -> Verbatim:
         slca_evaluation = SlcaEvaluation(output_dir)
         slca_evaluation.run()
 
+        # Get the result from the output file
+        with open(f"{output_dir}/evaluations/slca/result_1.json", "r") as file:
+            processed_result = json.load(file)
+            processed_result = processed_result["output"]
 
-        # Get the result from the output file 
-        with open(f"{output_dir}/evaluations/result_1.json", "r") as file:
-            processed_result = json.load(file).output
-
-        
         # Update the Verbatim instance
         verbatim.result = processed_result
         verbatim.status = "SUCCESS"
@@ -136,7 +134,7 @@ def process_verbatim_pipeline(verbatim: Verbatim) -> Verbatim:
 def callback(ch, method, properties, body):
     try:
         message = json.loads(body)
-        print(isinstance(message, dict))
+        
         logger.info(f"Received message: {message}")
 
         verbatim = Verbatim.from_json(json.loads(message))

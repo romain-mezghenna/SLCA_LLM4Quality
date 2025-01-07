@@ -85,6 +85,10 @@ def process_verbatim_pipeline(verbatim: Verbatim) -> Verbatim:
         output_dir = f"./tmp/output_{verbatim.id}"
         input_csv = f"./tmp/input_{verbatim.id}.csv"
 
+
+        # Create the tmp directory if it doesn't exist
+        os.makedirs("./tmp", exist_ok=True)
+
         # Write content to a CSV file
         with open(input_csv, "w") as csv_file:
             csv_file.write(verbatim.content)

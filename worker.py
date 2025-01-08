@@ -23,13 +23,31 @@ WORKER_RESPONSES_QUEUE = "worker_responses"
 MAX_RETRIES = 5
 RETRY_DELAY = 5  # seconds
 
+class Result(BaseModel):
+    circuit_de_prise_en_charge: Dict[str, Dict[str, int]] = Field(default_factory=dict)
+    professionnalisme_de_l_equipe: Dict[str, Dict[str, int]] = Field(default_factory=dict)
+    qualite_hoteliere: Dict[str, Dict[str, int]] = Field(default_factory=dict)
+
+    @classmethod
+    def from_dict(cls, data: dict):
+        """
+        Create a Result instance from a dictionary.
+        """
+        return cls(**data)
+
+    def to_dict(self) -> dict:
+        """
+        Convert the Result instance to a dictionary.
+        """
+        return self.model_dump()
+
 
 # Verbatim model
 class Verbatim(BaseModel):
     id: str = Field(default_factory=lambda: str(ObjectId()))
     content: str
     status: str
-    result: Optional[Dict[str, Dict[str, str]]] = None
+    result: Optional[Result] = None
     year: int
     created_at: Optional[datetime] = Field(
         default_factory=lambda: datetime.now(timezone.utc)

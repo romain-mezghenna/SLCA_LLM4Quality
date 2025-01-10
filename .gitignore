@@ -9,3 +9,9 @@ poetry.lock
 
 **/.RData
 **/.Rhistory
+
+# Ignore output directories and files
+output/
+*.out
+output/
+tmp/

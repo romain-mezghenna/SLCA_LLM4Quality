@@ -10,7 +10,7 @@ in this list, the first layer represents the themes, the second layer represents
             'Points positifs : Très bon accueil et prise en charge. Amabilité attention et respect du personnel envers les patients Lors d un appel post opératoire  j ai été bien rassurée et conseillée par l interne du service. Points négatifs : Le lieu de l'intervention n'était pas très  précis pour une personne qui ne connaît  pas l'hôpital.  Les services mentionnés  ne sont pas toujours compréhensibles pour les patients extérieurs.' :
             
             {
-            "Circuit de prise en charge": {
+            "circuit_de_prise_en_charge": {
             "La fluidité et la personnalisation du parcours": {
             "positive": "",
             "negative": "",
@@ -60,7 +60,7 @@ in this list, the first layer represents the themes, the second layer represents
             "not mentioned": "yes"
             }
             },
-            "Professionnalisme de l’équipe": {
+            "professionnalisme_de_l_equipe": {
             "L’information et les explications": {
             "positive": "Explications claires et précises relatives à une maladie, un traitement ou un pronostic, délivrées lors d’un appel téléphonique post-hospitalisation avec un médecin. | Lors d'un appel post opératoire j'ai été bien rassurée et conseillée par l'interne du service.",
             "negative": "",
@@ -98,7 +98,7 @@ in this list, the first layer represents the themes, the second layer represents
             "not mentioned": "yes"
             }
             },
-            "Qualité hôtelière": {
+            "qualite_hoteliere": {
             "L’accès à l’établissement": {
             "positive": "",
             "negative": "Signalétique intra hospitalière et informations sur l’emplacement des différents services | Le lieu de l'intervention n'était pas très précis pour une personne qui ne connaît pas l'hôpital.",

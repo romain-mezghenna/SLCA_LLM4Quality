@@ -187,6 +187,10 @@ def main():
     channel = connection.channel()
 
     channel.queue_declare(queue=WORKER_REQUESTS_QUEUE, durable=True)
+
+    # Ensure only one unacknowledged message is delivered to each worker at a time
+    channel.basic_qos(prefetch_count=1)
+    
     channel.basic_consume(queue=WORKER_REQUESTS_QUEUE, on_message_callback=callback)
 
     logger.info(f"Listening for messages on {WORKER_REQUESTS_QUEUE}...")
